@@ -44,6 +44,20 @@ public class User {
 				)
 		private Set<Role> roles = new HashSet<>();
 
+		
+		
+		public User() {
+		}
+		
+		public User(String email, String password, String firstName, String lastName) {
+			this.email = email;
+			this.password = password;
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
+
+
+
 		public Integer getId() {
 			return id;
 		}
@@ -108,5 +122,7 @@ public class User {
 			this.roles = roles;
 		}
 		
-		
+		public void addRole(Role role) {
+			this.roles.add(role);
+		}
 }
