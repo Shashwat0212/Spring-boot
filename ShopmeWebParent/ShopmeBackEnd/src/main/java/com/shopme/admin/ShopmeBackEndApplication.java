@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 @EntityScan({ "com.shopme.common.entity", "com.shopme.admin.user" })
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication
 public class ShopmeBackEndApplication {
 
 	public static void main(String[] args) {
