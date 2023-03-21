@@ -1,2 +1,2 @@
 # Spring-boot
-Shopme Project on springboot
+E-Commerce Website called Shopme Implemented using Spring Boot
