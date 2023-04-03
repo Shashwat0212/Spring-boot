@@ -54,6 +54,13 @@ public class Category {
 		return copy;
 	}
 
+	public Category(Integer id, String name, String alias) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.alias = alias;
+	}
+
 	public Category(Integer id) {
 		this.id = id;
 	}
@@ -64,6 +71,7 @@ public class Category {
 		copy.setImage(category.getImage());
 		copy.setAlias(category.getAlias());
 		copy.setEnabled(category.isEnabled());
+		copy.setHasChildren(category.getChildren().size() > 0);
 		return copy;
 	}
 	public static Category copyFull(Category category, String name) {
@@ -140,7 +148,20 @@ public class Category {
 	}
 	@Transient
 	public String getImagePath() {
+		if (this.id == null)
+			return "/images/image-thumbnail.png";
 		return "/category-images/" + this.id + "/" + this.image;
+	}
+
+	@Transient
+	private boolean hasChildren;
+
+	public boolean isHasChildren() {
+		return hasChildren;
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		this.hasChildren = hasChildren;
 	}
 
 }
