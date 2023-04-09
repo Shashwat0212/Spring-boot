@@ -164,4 +164,9 @@ public class Category {
 		this.hasChildren = hasChildren;
 	}
 
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
 }

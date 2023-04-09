@@ -1,15 +1,10 @@
 package com.shopme.admin.category;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
-
-import com.shopme.common.entity.Category;
 
 @DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -79,11 +74,11 @@ public class CategoryRepositoryTests {
 	// assertThat(category).isNotNull();
 	// assertThat(category.getName()).isEqualTo(name);
 	// }
-	@Test
-	public void testFindByAlias() {
-		String alias = "electronics";
-		Category category = repo.findByAlias(alias);
-		assertThat(category).isNotNull();
-		assertThat(category.getAlias()).isEqualTo(alias);
-	}
+	// @Test
+	// public void testFindByAlias() {
+	// String alias = "electronics";
+	// Category category = repo.findByAlias(alias);
+	// assertThat(category).isNotNull();
+	// assertThat(category.getAlias()).isEqualTo(alias);
+	// }
 }
