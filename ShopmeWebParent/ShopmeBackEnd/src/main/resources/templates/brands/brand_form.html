@@ -8,7 +8,7 @@
 			<h1>Manage Brands | [[${pageTitle}]]</h1>
 		</div>
 
-		<form th:action="@{/brands/save}" method="post" style="max-width: 500px; margin: 0 auto" enctype="multipart/form-data" th:object="${brand}">
+		<form th:action="@{/brands/save}" method="post" style="max-width: 500px; margin: 0 auto" enctype="multipart/form-data" th:object="${brand}" onsubmit="return checkUniqueBrand(this);">
 			<input type="hidden" th:field="*{id}" />
 			<div class="border border-secondary rounded p-3">
 				<div class="form-group row">
@@ -82,6 +82,36 @@
 										.append("<span class='badge badge-secondary m-1'>"
 												+ catName + "</span>");
 							});
+		}
+
+		function checkUniqueBrand(form) {
+			url = "[[@{/brands/check_unique}]]";
+			brandName = $("#name").val();
+			brandId = $("#id").val();
+			csrfValue = $("input[name='_csrf']").val();
+			params = {
+				id : brandId,
+				name : brandName,
+				_csrf : csrfValue
+			};
+
+			$
+					.post(
+							url,
+							params,
+							function(response) {
+								if (response == "OK") {
+									form.submit();
+								} else if (response == "Duplicated") {
+									showWarningModal("There is another brand having the name "
+											+ brandName);
+								} else {
+									showErroModal("Unknown response from server");
+								}
+							}).fail(function() {
+						showErrorModal("Could not connect to server");
+					});
+			return false;
 		}
 	</script>
 	<script th:src="@{/js/common_form.js}"></script>

@@ -27,16 +27,25 @@ public class Brand {
 	private String logo;
 
 	@ManyToMany
-	@JoinTable(name = "brand_categories", joinColumns = @JoinColumn(name = "brand_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@JoinTable(name = "brands_categories", joinColumns = @JoinColumn(name = "brand_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
 
 	public Brand() {
+	}
+
+	public Brand(String name) {
+		this.name = name;
 	}
 
 	public Brand(String name, String logo, Set<Category> categories) {
 		this.name = name;
 		this.logo = logo;
 		this.categories = categories;
+	}
+
+	public Brand(Integer id, String name) {
+		this.name = name;
+		this.id = id;
 	}
 
 	public Integer getId() {

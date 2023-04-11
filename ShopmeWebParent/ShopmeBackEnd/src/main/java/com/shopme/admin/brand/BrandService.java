@@ -4,12 +4,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.shopme.common.entity.Brand;
 
 @Service
 public class BrandService {
+
+	public static final int BRANDS_PER_PAGE = 10;
 	@Autowired
 	private BrandRepository brandRepo;
 
@@ -36,4 +42,30 @@ public class BrandService {
 		}
 		brandRepo.deleteById(id);
 	}
+
+	public String checkUnique(Integer id, String name) {
+		boolean isCreatingNew = (id == null || id == 0);
+		Brand brandByName = brandRepo.getByName(name);
+		if (isCreatingNew) {
+			if (brandByName != null) {
+				return "Duplicated";
+			}
+		} else {
+			if (brandByName != null && brandByName.getId() != id) {
+				return "Duplicated";
+			}
+		}
+		return "OK";
+	}
+	public Page<Brand> listByPage(int pageNum, String sortField, String sortDir,
+			String keyword) {
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+		Pageable pageable = PageRequest.of(pageNum - 1, BRANDS_PER_PAGE, sort);
+		if (keyword != null) {
+			return brandRepo.findAll(keyword, pageable);
+		}
+		return brandRepo.findAll(pageable);
+	}
+
 }

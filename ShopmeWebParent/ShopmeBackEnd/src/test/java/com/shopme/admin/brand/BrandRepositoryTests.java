@@ -15,9 +15,9 @@ import com.shopme.common.entity.Brand;
 @Rollback(false)
 public class BrandRepositoryTests {
 	@Autowired
-	BrandRepository brandRepo;
+	private BrandRepository brandRepo;
 	@Autowired
-	CategoryRepository catRepo;
+	private CategoryRepository catRepo;
 
 	// @Test
 	// public void testCreateBrand() {
