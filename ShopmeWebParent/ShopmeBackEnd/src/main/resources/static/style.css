@@ -43,3 +43,9 @@
 		display: table-cell;
 	}
 }
+
+input[type="checkbox"] {
+	box-sizing: border-box;
+	padding: 0;
+	accent-color: #007bff;
+}

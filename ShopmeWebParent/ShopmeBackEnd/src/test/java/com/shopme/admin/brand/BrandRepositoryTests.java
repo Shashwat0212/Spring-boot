@@ -1,5 +1,7 @@
 package com.shopme.admin.brand;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -30,18 +32,12 @@ public class BrandRepositoryTests {
 	// Brand savedBrand = brandRepo.save(brand);
 	// assertThat(savedBrand.getId()).isGreaterThan(0);
 	// }
-	// @Test
-	// public void testFindAllBrands() {
-	// List<Brand> brands = brandRepo.findAll();
-	// for (Brand brand : brands) {
-	// System.out.print(brand.getId() + " " + brand.getName() + " ");
-	// Set<Category> categories = brand.getCategories();
-	// for (Category category : categories) {
-	// System.out.print(category.getName() + ", ");
-	// }
-	// System.out.println();
-	// }
-	// }
+	@Test
+	public void testFindAllBrands() {
+		Iterable<Brand> brands = brandRepo.findAll();
+		brands.forEach(System.out::println);
+		assertThat(brands).isNotEmpty();
+	}
 
 	// @Test
 	// public void testGetById() {

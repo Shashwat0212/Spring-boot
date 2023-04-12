@@ -42,10 +42,12 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests().requestMatchers("/users/**")
 				.hasAuthority("Admin")
 				.requestMatchers("/categories/**", "/brands/**")
-				.hasAnyAuthority("Admin", "Editor").anyRequest().authenticated()
-				.and().formLogin().loginPage("/login")
-				.usernameParameter("email").permitAll().and().logout()
-				.permitAll().and().rememberMe()
+				.hasAnyAuthority("Admin", "Editor")
+				.requestMatchers("/products/**")
+				.hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+				.anyRequest().authenticated().and().formLogin()
+				.loginPage("/login").usernameParameter("email").permitAll()
+				.and().logout().permitAll().and().rememberMe()
 				.key("abcdefghijklmnopqrs_1234567890")
 				.tokenValiditySeconds(7 * 24 * 60 * 60);
 		return http.build();

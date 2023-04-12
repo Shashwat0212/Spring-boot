@@ -17,8 +17,6 @@ public interface BrandRepository
 			PagingAndSortingRepository<Brand, Integer>,
 			CrudRepository<Brand, Integer> {
 
-	public List<Brand> findAll();
-
 	@Query("SELECT b FROM Brand b WHERE b.id = :id")
 	public Brand getById(@Param("id") Integer id);
 
@@ -33,5 +31,8 @@ public interface BrandRepository
 
 	@Query("SELECT b FROM Brand b WHERE b.name LIKE %?1%")
 	public Page<Brand> findAll(String keyword, Pageable pageable);
+
+	@Query("SELECT NEW Brand(b.id, b.name) FROM Brand b ORDER BY b.name ASC")
+	public List<Brand> findAll();
 
 }

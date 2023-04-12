@@ -46,7 +46,7 @@ public class Product {
 	private float price;
 
 	@Column(name = "discount_percent")
-	private float discountPrice;
+	private float discountPercent;
 
 	private float length;
 	private float width;
@@ -149,12 +149,12 @@ public class Product {
 		this.price = price;
 	}
 
-	public float getDiscountPrice() {
-		return discountPrice;
+	public float getDiscountPercent() {
+		return discountPercent;
 	}
 
-	public void setDiscountPrice(float discountPrice) {
-		this.discountPrice = discountPrice;
+	public void setDiscountPercent(float discountPercent) {
+		this.discountPercent = discountPercent;
 	}
 
 	public float getLength() {
