@@ -31,7 +31,9 @@
 				<tbody>
 					<tr th:each="product : ${listProducts}">
 						<td>[[${product.id}]]</td>
-						<td></td>
+						<td>
+							<img th:src="@{${product.mainImagePath}}" style="width: 120px" class="img-fluid" />
+						</td>
 						<td>[[${product.name}]]</td>
 						<td>[[${product.brand.name}]]</td>
 						<td>[[${product.category.name}]]</td>
@@ -43,7 +45,7 @@
 							&nbsp;
 							<div th:replace="fragments :: edit('product', '/product/edit/' + ${product.id})" />
 							&nbsp;
-							<div th:replace="fragments :: delete('product', ${product.id}, '/product/delete/' + ${product.id}, true)" />
+							<div th:replace="fragments :: delete('product', ${product.id}, '/products/delete/' + ${product.id}, true)" />
 						</td>
 					</tr>
 				</tbody>
@@ -56,6 +58,12 @@
 	<script th:src="@{/js/common_list.js}"></script>
 	<script type="text/javascript">
 		moduleURL = "[[@{/products}]]";
+		$(document).ready(function() {
+			$(".link-delete").on("click", function(e) {
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'product');
+			});
+		});
 	</script>
 </body>
 </html>

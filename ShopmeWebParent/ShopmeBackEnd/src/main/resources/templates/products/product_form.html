@@ -12,7 +12,7 @@
 			<h1>Manage Products | [[${pageTitle}]]</h1>
 		</div>
 
-		<form th:action="@{/products/save}" method="post" th:object="${product}">
+		<form th:action="@{/products/save}" method="post" th:object="${product}" onsubmit="return checkUniqueProduct(this);" enctype="multipart/form-data">
 			<input type="hidden" th:field="*{id}" />
 			<div>
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -40,7 +40,9 @@
 					<div class="tab-pane" id="description" role="tabpanel">
 						<div th:replace="products/product_description :: content" />
 					</div>
-					<div class="tab-pane" id="images" role="tabpanel">Images</div>
+					<div class="tab-pane" id="images" role="tabpanel">
+						<div th:replace="products/product_images :: content" />
+					</div>
 					<div class="tab-pane" id="details" role="tabpanel">Details</div>
 					<div class="tab-pane p-3" id="shipping" role="tabpanel">
 						<div th:replace="products/product_shipping :: content" />
@@ -62,36 +64,14 @@
 	</div>
 
 	<script type="text/javascript">
+		MAX_FILE_SIZE = 502400;//500KB
 		moduleURL = "[[@{/products}]]";
 		brandModuleURL = "[[@{/brands}]]";
-
-		dropdownBrands = $("#brand");
-		dropdownCategories = $("#category");
-
-		$(document).ready(function() {
-
-			$("#shortDescription").richText();
-			$("#fullDescription").richText();
-
-			dropdownBrands.change(function() {
-				dropdownCategories.empty();
-				getCategories();
-			});
-			getCategories();
-		});
-		function getCategories() {
-			brandId = dropdownBrands.val();
-			url = brandModuleURL + "/" + brandId + "/categories";
-			$.get(url, function(responseJson) {
-				$.each(responseJson, function(index, category) {
-					$("<option>").val(category.id).text(category.name)
-							.appendTo(dropdownCategories);
-				})
-			})
-
-		}
+		defaultImageThumbnailSrc = "[[@{/images/image-thumbnail.png}]]";
+		checkUniqueURL = "[[@{/products/check_unique}]]";
 	</script>
 	<script th:src="@{/js/common_form.js}"></script>
+	<script th:src="@{/js/product_form.js}"></script>
 
 </body>
 

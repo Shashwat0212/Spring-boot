@@ -1,11 +1,16 @@
 package com.shopme.admin.product;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
+
+import com.shopme.common.entity.Product;
 
 @DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -75,4 +80,17 @@ public class ProductRepositoryTests {
 	//
 	// assertThat(!result.isPresent());
 	// }
+	@Test
+	public void testSaveImages() {
+		Product product = prodRepo.findById(1).get();
+
+		product.setMainImage("main.png");
+		product.addExtraImage("extra1.png");
+		product.addExtraImage("extra2.png");
+		product.addExtraImage("extra3.png");
+
+		Product saved = prodRepo.save(product);
+
+		assertThat(saved.getImages().size()).isEqualTo(3);
+	}
 }
