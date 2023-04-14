@@ -80,17 +80,27 @@ public class ProductRepositoryTests {
 	//
 	// assertThat(!result.isPresent());
 	// }
+	// @Test
+	// public void testSaveImages() {
+	// Product product = prodRepo.findById(1).get();
+	//
+	// product.setMainImage("main.png");
+	// product.addExtraImage("extra1.png");
+	// product.addExtraImage("extra2.png");
+	// product.addExtraImage("extra3.png");
+	//
+	// Product saved = prodRepo.save(product);
+	//
+	// assertThat(saved.getImages().size()).isEqualTo(3);
+	// }
 	@Test
-	public void testSaveImages() {
-		Product product = prodRepo.findById(1).get();
-
-		product.setMainImage("main.png");
-		product.addExtraImage("extra1.png");
-		product.addExtraImage("extra2.png");
-		product.addExtraImage("extra3.png");
-
-		Product saved = prodRepo.save(product);
-
-		assertThat(saved.getImages().size()).isEqualTo(3);
+	public void testSaveDetails() {
+		Integer id = 1;
+		Product product = prodRepo.findById(id).get();
+		product.addDetails("Device Memory", "128 GB");
+		product.addDetails("CPU Model", "Mediatek");
+		product.addDetails("OS", "Android 10");
+		Product savedProduct = prodRepo.save(product);
+		assertThat(savedProduct.getDetails()).isNotEmpty();
 	}
 }

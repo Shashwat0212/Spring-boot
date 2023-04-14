@@ -1,21 +1,12 @@
 var extraImagesCount = 0;
-dropdownBrands = $("#brand");
-dropdownCategories = $("#category");
 
 $(document).ready(function() {
-
-	$("#shortDescription").richText();
-	$("#fullDescription").richText();
-
-	dropdownBrands.change(function() {
-		dropdownCategories.empty();
-		getCategories();
-	});
-	getCategories();
-
 	$("input[name='extraImage']").each(function(index) {
 		extraImagesCount++;
 		$(this).change(function() {
+			if (!checkFileSize(this)) {
+				return;
+			}
 			showExtraImageThumbnail(this, index);
 		});
 	});
@@ -59,43 +50,4 @@ function addNextExtraImageSection(index) {
 }
 function removeExtraImage(index) {
 	$("#divExtraImage" + index).remove();
-}
-function getCategories() {
-	brandId = dropdownBrands.val();
-	url = brandModuleURL + "/" + brandId + "/categories";
-	$.get(url, function(responseJson) {
-		$.each(responseJson, function(index, category) {
-			$("<option>").val(category.id).text(category.name)
-				.appendTo(dropdownCategories);
-		})
-	})
-
-}
-function checkUniqueProduct(form) {
-	productName = $("#name").val();
-	productId = $("#id").val();
-	csrfValue = $("input[name='_csrf']").val();
-	params = {
-		id: productId,
-		name: productName,
-		_csrf: csrfValue
-	};
-
-	$
-		.post(
-			checkUniqueURL,
-			params,
-			function(response) {
-				if (response == "OK") {
-					form.submit();
-				} else if (response == "Duplicated") {
-					showWarningModal("There is another product having the name "
-						+ productName);
-				} else {
-					showErroModal("Unknown response from server");
-				}
-			}).fail(function() {
-				showErrorModal("Could not connect to server");
-			});
-	return false;
 }
