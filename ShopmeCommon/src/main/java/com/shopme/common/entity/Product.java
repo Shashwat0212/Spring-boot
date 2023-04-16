@@ -3,6 +3,7 @@ package com.shopme.common.entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -71,10 +72,10 @@ public class Product {
 	@JoinColumn(name = "brand_id")
 	private Brand brand;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<ProductImage> images = new HashSet<>();
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductDetails> details = new ArrayList<>();
 
 	public Integer getId() {
@@ -263,6 +264,21 @@ public class Product {
 
 	public void addDetails(String name, String value) {
 		this.details.add(new ProductDetails(name, value, this));
+	}
+
+	public boolean containsImageName(String imageName) {
+		Iterator<ProductImage> iterator = images.iterator();
+		while (iterator.hasNext()) {
+			ProductImage image = iterator.next();
+			if (image.getName().equals(imageName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void addDetails(Integer id, String name, String value) {
+		this.details.add(new ProductDetails(id, name, value, this));
 	}
 
 }
