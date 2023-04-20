@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,20 +39,20 @@ public class ProductController {
 			}
 			List<Category> listCategoryParents = catService
 					.getCategoryParents(category);
-			Page<Product> pageProduct = prodService.listByCategories(pageNum,
+			Page<Product> pageProducts = prodService.listByCategories(pageNum,
 					category.getId());
-			List<Product> listProducts = pageProduct.getContent();
+			List<Product> listProducts = pageProducts.getContent();
 			long startCount = (pageNum - 1) * ProductService.PRODUCTS_PER_PAGE
 					+ 1;
 			long endCount = startCount + ProductService.PRODUCTS_PER_PAGE - 1;
-			if (endCount > pageProduct.getTotalElements()) {
-				endCount = pageProduct.getTotalElements();
+			if (endCount > pageProducts.getTotalElements()) {
+				endCount = pageProducts.getTotalElements();
 			}
-			model.addAttribute("totalPages", pageProduct.getTotalPages());
+			model.addAttribute("totalPages", pageProducts.getTotalPages());
 			model.addAttribute("currentPage", pageNum);
 			model.addAttribute("startCount", startCount);
 			model.addAttribute("endCount", endCount);
-			model.addAttribute("totalItems", pageProduct.getTotalElements());
+			model.addAttribute("totalItems", pageProducts.getTotalElements());
 			model.addAttribute("listCategoryParents", listCategoryParents);
 			model.addAttribute("pageTitle", category.getName());
 			model.addAttribute("listProducts", listProducts);
@@ -76,5 +77,35 @@ public class ProductController {
 		} catch (ProductNotFoundException e) {
 			return "error/404";
 		}
+	}
+
+	@GetMapping("/search")
+	public String searchFirstPage(@Param("keyword") String keyword,
+			Model model) {
+		return searchByPage(keyword, model, 1);
+	}
+
+	@GetMapping("/search/page/{pageNum}")
+	public String searchByPage(@Param("keyword") String keyword, Model model,
+			@PathVariable("pageNum") int pageNum) {
+		Page<Product> pageProducts = prodService.search(keyword, pageNum);
+		List<Product> listResult = pageProducts.getContent();
+
+		long startCount = (pageNum - 1) * ProductService.SEARCH_RESULTS_PER_PAGE
+				+ 1;
+		long endCount = startCount + ProductService.SEARCH_RESULTS_PER_PAGE - 1;
+		if (endCount > pageProducts.getTotalElements()) {
+			endCount = pageProducts.getTotalElements();
+		}
+		model.addAttribute("totalPages", pageProducts.getTotalPages());
+		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
+		model.addAttribute("totalItems", pageProducts.getTotalElements());
+		model.addAttribute("pageTitle", keyword + " - Search Result");
+
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("listProducts", listResult);
+		return "product/search_result";
 	}
 }
