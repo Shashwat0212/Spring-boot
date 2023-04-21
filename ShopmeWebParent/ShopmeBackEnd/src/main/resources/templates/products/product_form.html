@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div th:replace="navigation :: menu"></div>
 		<div>
-			<h1>Manage Products | [[${pageTitle}]]</h1>
+			<h2>Manage Products | [[${pageTitle}]]</h2>
 		</div>
 
 		<form th:action="@{/products/save}" method="post" th:object="${product}" onsubmit="return checkUniqueProduct(this);" enctype="multipart/form-data">
