@@ -7,14 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import com.shopme.admin.paging.SearchRepository;
 import com.shopme.common.entity.Brand;
 
 public interface BrandRepository
 		extends
-			PagingAndSortingRepository<Brand, Integer>,
+			SearchRepository<Brand, Integer>,
 			CrudRepository<Brand, Integer> {
 
 	@Query("SELECT b FROM Brand b WHERE b.id = :id")

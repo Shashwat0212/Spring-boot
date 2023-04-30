@@ -6,11 +6,10 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 
@@ -25,26 +24,29 @@ public class ProductService {
 	public List<Product> listAll() {
 		return (List<Product>) prodRepo.findAll();
 	}
-	public Page<Product> listByPage(int pageNum, String sortField,
-			String sortDir, String keyword, Integer categoryId) {
-		Sort sort = Sort.by(sortField);
-		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE,
-				sort);
+	public void listByPage(int pageNum, PagingAndSortingHelper helper,
+			Integer categoryId) {
+		Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+		String keyword = helper.getKeyword();
+		Page<Product> page = null;
 		if (keyword != null && !keyword.isEmpty()) {
 			if (categoryId != null && categoryId > 0) {
 				String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
-				return prodRepo.searchInCategory(categoryId, categoryIdMatch,
+				page = prodRepo.searchInCategory(categoryId, categoryIdMatch,
 						keyword, pageable);
+			} else {
+				page = prodRepo.findAll(keyword, pageable);
 			}
-			return prodRepo.findAll(keyword, pageable);
+		} else {
+			if (categoryId != null && categoryId > 0) {
+				String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+				page = prodRepo.findAllInCategory(categoryId, categoryIdMatch,
+						pageable);
+			} else {
+				page = prodRepo.findAll(pageable);
+			}
 		}
-		if (categoryId != null && categoryId > 0) {
-			String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
-			return prodRepo.findAllInCategory(categoryId, categoryIdMatch,
-					pageable);
-		}
-		return prodRepo.findAll(pageable);
+		helper.updateModelAttributes(pageNum, page);
 	}
 
 	public Product save(Product product) {
