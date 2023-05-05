@@ -29,16 +29,27 @@ public class OAuth2LoginSuccessHandler
 		String name = oauth2User.getName();
 		String email = oauth2User.getEmail();
 		String countryCode = request.getLocale().getCountry();
-		System.out.println("name: " + name + " Email: " + email);
+		String clientName = oauth2User.getClientName();
+		AuthenticationType authenticationType = getAuthenticationType(
+				clientName);
 		Customer customer = customerService.getCustomerByEmail(email);
 		if (customer == null) {
 			customerService.addNewCustomerUponOauthLogin(name, email,
-					countryCode);
+					countryCode, authenticationType);
 		} else {
+			oauth2User.setFullName(customer.getFullName());
 			customerService.updateAuthenticationType(customer,
-					AuthenticationType.GOOGLE);
+					authenticationType);
 		}
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
-
+	private AuthenticationType getAuthenticationType(String clientName) {
+		if (clientName.equals("Google")) {
+			return AuthenticationType.GOOGLE;
+		} else if (clientName.equals("Facebook")) {
+			return AuthenticationType.FACEBOOK;
+		} else {
+			return AuthenticationType.DATABASE;
+		}
+	}
 }
