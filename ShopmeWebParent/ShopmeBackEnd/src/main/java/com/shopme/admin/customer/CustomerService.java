@@ -82,6 +82,8 @@ public class CustomerService {
 		customerInForm.setVerificationCode(customerInDB.getVerificationCode());
 		customerInForm
 				.setAuthenticationType(customerInDB.getAuthenticationType());
+		customerInForm
+				.setResetPasswordToken(customerInDB.getResetPasswordToken());
 		customerRepo.save(customerInForm);
 	}
 	public void delete(Integer id) throws CustomerNotFoundException {
