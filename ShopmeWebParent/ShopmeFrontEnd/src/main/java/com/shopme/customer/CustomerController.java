@@ -1,7 +1,6 @@
 package com.shopme.customer;
 
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,27 +89,14 @@ public class CustomerController {
 	}
 	@GetMapping("/account_details")
 	public String viewAccountDetails(Model model, HttpServletRequest request) {
-		String email = getEmailOfAuthenticatedCustomer(request);
+		String email = Utility.getEmailOfAuthenticatedCustomer(request);
 		Customer customer = customerService.getCustomerByEmail(email);
 		List<Country> listAllCountries = customerService.listAllCountries();
 		model.addAttribute("customer", customer);
 		model.addAttribute("listCountries", listAllCountries);
 		return "customer/account_form";
 	}
-	private String getEmailOfAuthenticatedCustomer(HttpServletRequest request) {
-		Principal principal = request.getUserPrincipal();
-		String customerEmail = null;
-		if (principal instanceof UsernamePasswordAuthenticationToken
-				|| principal instanceof RememberMeAuthenticationToken) {
-			customerEmail = request.getUserPrincipal().getName();
-		} else if (principal instanceof OAuth2AuthenticationToken) {
-			OAuth2AuthenticationToken oAuth2Token = (OAuth2AuthenticationToken) principal;
-			CustomerOAuth2User oAuth2User = (CustomerOAuth2User) oAuth2Token
-					.getPrincipal();
-			customerEmail = oAuth2User.getEmail();
-		}
-		return customerEmail;
-	}
+
 	@PostMapping("/update_account_details")
 	public String updateAccountDetails(Model model, Customer customer,
 			RedirectAttributes ra, HttpServletRequest request) {
