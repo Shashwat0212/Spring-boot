@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "cart_items")
@@ -54,5 +55,8 @@ public class CartItem {
 		return "CartItem [id=" + id + ", customer=" + customer + ", product="
 				+ product + ", quantity=" + quantity + "]";
 	}
-
+	@Transient
+	public float getSubtotal() {
+		return product.getDiscountPrice() * quantity;
+	}
 }
