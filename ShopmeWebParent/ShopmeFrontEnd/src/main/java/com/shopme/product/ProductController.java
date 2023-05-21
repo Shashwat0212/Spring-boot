@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.shopme.category.CategoryService;
 import com.shopme.common.entity.Category;
@@ -80,13 +80,14 @@ public class ProductController {
 	}
 
 	@GetMapping("/search")
-	public String searchFirstPage(@Param("keyword") String keyword,
+	public String searchFirstPage(@RequestParam("keyword") String keyword,
 			Model model) {
 		return searchByPage(keyword, model, 1);
 	}
 
 	@GetMapping("/search/page/{pageNum}")
-	public String searchByPage(@Param("keyword") String keyword, Model model,
+	public String searchByPage(@RequestParam("keyword") String keyword,
+			Model model,
 			@PathVariable("pageNum") int pageNum) {
 		Page<Product> pageProducts = prodService.search(keyword, pageNum);
 		List<Product> listResult = pageProducts.getContent();

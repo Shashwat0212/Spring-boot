@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +29,8 @@ public class CustomerController {
 
 	@GetMapping("/customers/page/{pageNum}")
 	public String listByPage(Model model,
-			@PathVariable(name = "pageNum") int pageNum,
-			@Param("sortField") String sortField,
-			@Param("srtDir") String sortDir, @Param("keyword") String keyword) {
+			@PathVariable(name = "pageNum") int pageNum, String sortField,
+			String sortDir, String keyword) {
 		System.out.println("SortField: " + sortField);
 		System.out.println("Sort Dir: " + sortDir);
 		Page<Customer> page = customerService.listByPage(pageNum, sortField,
