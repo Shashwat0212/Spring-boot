@@ -1,20 +1,16 @@
-package com.shopme.common.entity;
+package com.shopme.common.entity.product;
+
+import com.shopme.common.entity.IdBasedEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "product_details")
-public class ProductDetails {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+public class ProductDetails extends IdBasedEntity {
 
 	@Column(nullable = false, length = 255)
 	private String name;
@@ -43,14 +39,6 @@ public class ProductDetails {
 		this.name = name;
 		this.value = value;
 		this.product = product;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getName() {
