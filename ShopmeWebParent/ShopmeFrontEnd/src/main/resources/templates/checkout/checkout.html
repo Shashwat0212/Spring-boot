@@ -18,7 +18,7 @@
 						<p>
 							<b>Ship to:</b>
 							&nbsp; [[${shippingAddress}]]
-							<a th:href="@{/address_book}">[Ship to another address]</a>
+							<a th:href="@{/address_book(redirect=checkout)}">[Ship to another address]</a>
 						</p>
 						<p>
 							<b>Days to deliver: </b>
@@ -36,15 +36,22 @@
 					</div>
 					<div class="card-body">
 						<div th:if="${checkoutInfo.codSupported}">
-							<p>
-								<input
-									type="radio"
-									name="paymentMethod"
-									id="radioCOD"
-									value="COD" />
-								Cash on Delivery (COD) &nbsp;
-								<button class="btn btn-primary">Place Order with COD</button>
-							</p>
+							<form
+								th:action="@{/place_order}"
+								method="post">
+								<p>
+									<input
+										type="radio"
+										name="paymentMethod"
+										id="radioCOD"
+										value="COD" />
+									Cash on Delivery (COD) &nbsp;
+									<button
+										class="btn btn-primary d-none"
+										type="submit"
+										id="buttonSubmit">Place Order with COD</button>
+								</p>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -111,5 +118,16 @@
 	<script
 		type="text/javascript"
 		th:src="@{/js/common_modal.js}"></script>
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		var csrfHeaderName = "[[${_csrf.headerName}]]";
+		var csrfValue = "[[${_csrf.token}]]";
+
+		$(document).ready(function() {
+			$("#radioCOD").on("click", function() {
+				$("#buttonSubmit").removeClass("d-none");
+			});
+		});
+	</script>
 </body>
 </html>

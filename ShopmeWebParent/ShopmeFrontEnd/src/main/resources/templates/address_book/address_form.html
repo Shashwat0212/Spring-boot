@@ -19,6 +19,10 @@
 			<input
 				type="hidden"
 				th:field="*{defaultForShipping}" />
+			<input
+				type="hidden"
+				name="redirect"
+				th:value="${param.redirect}" />
 			<div
 				th:if="${message != null}"
 				class="alert alert-success text-center">[[${message}]]</div>
