@@ -30,11 +30,11 @@ public class OrderService {
 		Order newOrder = new Order();
 		newOrder.setOrderTime(new Date());
 
-		// if (paymentMethod.equals(PaymentMethod.PAYPAL)) {
-		// newOrder.setStatus(OrderStatus.PAID);
-		// } else {
+		if (paymentMethod.equals(PaymentMethod.PAYPAL)) {
+			newOrder.setStatus(OrderStatus.PAID);
+		} else {
 		newOrder.setStatus(OrderStatus.NEW);
-		// }
+		}
 
 		newOrder.setCustomer(customer);
 		newOrder.setProductCost(checkoutInfo.getProductCost());
