@@ -113,7 +113,7 @@ public class OrderController {
 			model.addAttribute("order", order);
 			model.addAttribute("listCountries", listCountries);
 
-			return "orders/order_form";
+			return "orders/orders_form";
 
 		} catch (OrderNotFoundException ex) {
 			ra.addFlashAttribute("message", ex.getMessage());

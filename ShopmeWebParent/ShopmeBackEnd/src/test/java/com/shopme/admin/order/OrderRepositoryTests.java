@@ -3,6 +3,7 @@ package com.shopme.admin.order;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
-import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.order.Order;
-import com.shopme.common.entity.order.OrderDetail;
 import com.shopme.common.entity.order.OrderStatus;
-import com.shopme.common.entity.order.PaymentMethod;
-import com.shopme.common.entity.product.Product;
+import com.shopme.common.entity.order.OrderTrack;
 
 @DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -103,53 +101,53 @@ public class OrderRepositoryTests {
 	// assertThat(savedOrder.getId()).isGreaterThan(0);
 	// }
 
-	@Test
-	public void testCreateNewOrderWithMultipleProducts() {
-		Customer customer = entityManager.find(Customer.class, 10);
-		Product product1 = entityManager.find(Product.class, 20);
-		Product product2 = entityManager.find(Product.class, 40);
-
-		Order mainOrder = new Order();
-		mainOrder.setOrderTime(new Date());
-		mainOrder.setCustomer(customer);
-		mainOrder.copyAddressFromCustomer();
-
-		OrderDetail orderDetail1 = new OrderDetail();
-		orderDetail1.setProduct(product1);
-		orderDetail1.setOrder(mainOrder);
-		orderDetail1.setProductCost(product1.getCost());
-		orderDetail1.setShippingCost(10);
-		orderDetail1.setQuantity(1);
-		orderDetail1.setSubtotal(product1.getPrice());
-		orderDetail1.setUnitPrice(product1.getPrice());
-
-		OrderDetail orderDetail2 = new OrderDetail();
-		orderDetail2.setProduct(product2);
-		orderDetail2.setOrder(mainOrder);
-		orderDetail2.setProductCost(product2.getCost());
-		orderDetail2.setShippingCost(20);
-		orderDetail2.setQuantity(2);
-		orderDetail2.setSubtotal(product2.getPrice() * 2);
-		orderDetail2.setUnitPrice(product2.getPrice());
-
-		mainOrder.getOrderDetails().add(orderDetail1);
-		mainOrder.getOrderDetails().add(orderDetail2);
-
-		mainOrder.setShippingCost(30);
-		mainOrder.setProductCost(product1.getCost() + product2.getCost());
-		mainOrder.setTax(0);
-		float subtotal = product1.getPrice() + product2.getPrice() * 2;
-		mainOrder.setSubtotal(subtotal);
-		mainOrder.setTotal(subtotal + 30);
-
-		mainOrder.setPaymentMethod(PaymentMethod.COD);
-		mainOrder.setStatus(OrderStatus.PACKAGED);
-		mainOrder.setDeliverDate(new Date());
-		mainOrder.setDeliverDays(3);
-
-		Order savedOrder = repo.save(mainOrder);
-		assertThat(savedOrder.getId()).isGreaterThan(0);
-	}
+	// @Test
+	// public void testCreateNewOrderWithMultipleProducts() {
+	// Customer customer = entityManager.find(Customer.class, 10);
+	// Product product1 = entityManager.find(Product.class, 20);
+	// Product product2 = entityManager.find(Product.class, 40);
+	//
+	// Order mainOrder = new Order();
+	// mainOrder.setOrderTime(new Date());
+	// mainOrder.setCustomer(customer);
+	// mainOrder.copyAddressFromCustomer();
+	//
+	// OrderDetail orderDetail1 = new OrderDetail();
+	// orderDetail1.setProduct(product1);
+	// orderDetail1.setOrder(mainOrder);
+	// orderDetail1.setProductCost(product1.getCost());
+	// orderDetail1.setShippingCost(10);
+	// orderDetail1.setQuantity(1);
+	// orderDetail1.setSubtotal(product1.getPrice());
+	// orderDetail1.setUnitPrice(product1.getPrice());
+	//
+	// OrderDetail orderDetail2 = new OrderDetail();
+	// orderDetail2.setProduct(product2);
+	// orderDetail2.setOrder(mainOrder);
+	// orderDetail2.setProductCost(product2.getCost());
+	// orderDetail2.setShippingCost(20);
+	// orderDetail2.setQuantity(2);
+	// orderDetail2.setSubtotal(product2.getPrice() * 2);
+	// orderDetail2.setUnitPrice(product2.getPrice());
+	//
+	// mainOrder.getOrderDetails().add(orderDetail1);
+	// mainOrder.getOrderDetails().add(orderDetail2);
+	//
+	// mainOrder.setShippingCost(30);
+	// mainOrder.setProductCost(product1.getCost() + product2.getCost());
+	// mainOrder.setTax(0);
+	// float subtotal = product1.getPrice() + product2.getPrice() * 2;
+	// mainOrder.setSubtotal(subtotal);
+	// mainOrder.setTotal(subtotal + 30);
+	//
+	// mainOrder.setPaymentMethod(PaymentMethod.COD);
+	// mainOrder.setStatus(OrderStatus.PACKAGED);
+	// mainOrder.setDeliverDate(new Date());
+	// mainOrder.setDeliverDays(3);
+	//
+	// Order savedOrder = repo.save(mainOrder);
+	// assertThat(savedOrder.getId()).isGreaterThan(0);
+	// }
 	//
 	// @Test
 	// public void testListOrders() {
@@ -193,31 +191,31 @@ public class OrderRepositoryTests {
 	// assertThat(result).isNotPresent();
 	// }
 	//
-	// @Test
-	// public void testUpdateOrderTracks() {
-	// Integer orderId = 19;
-	// Order order = repo.findById(orderId).get();
-	//
-	// OrderTrack newTrack = new OrderTrack();
-	// newTrack.setOrder(order);
-	// newTrack.setUpdatedTime(new Date());
-	// newTrack.setStatus(OrderStatus.NEW);
-	// newTrack.setNotes(OrderStatus.NEW.defaultDescription());
-	//
-	// OrderTrack processingTrack = new OrderTrack();
-	// processingTrack.setOrder(order);
-	// processingTrack.setUpdatedTime(new Date());
-	// processingTrack.setStatus(OrderStatus.PROCESSING);
-	// processingTrack.setNotes(OrderStatus.PROCESSING.defaultDescription());
-	//
-	// List<OrderTrack> orderTracks = order.getOrderTracks();
-	// orderTracks.add(newTrack);
-	// orderTracks.add(processingTrack);
-	//
-	// Order updatedOrder = repo.save(order);
-	//
-	// assertThat(updatedOrder.getOrderTracks()).hasSizeGreaterThan(1);
-	// }
+	@Test
+	public void testUpdateOrderTracks() {
+		Integer orderId = 10;
+		Order order = repo.findById(orderId).get();
+
+		OrderTrack newTrack = new OrderTrack();
+		newTrack.setOrder(order);
+		newTrack.setUpdatedTime(new Date());
+		newTrack.setStatus(OrderStatus.PICKED);
+		newTrack.setNotes(OrderStatus.PICKED.defaultDescription());
+
+		OrderTrack processingTrack = new OrderTrack();
+		processingTrack.setOrder(order);
+		processingTrack.setUpdatedTime(new Date());
+		processingTrack.setStatus(OrderStatus.PACKAGED);
+		processingTrack.setNotes(OrderStatus.PACKAGED.defaultDescription());
+
+		List<OrderTrack> orderTracks = order.getOrderTracks();
+		orderTracks.add(newTrack);
+		orderTracks.add(processingTrack);
+
+		Order updatedOrder = repo.save(order);
+
+		assertThat(updatedOrder.getOrderTracks()).hasSizeGreaterThan(1);
+	}
 	//
 	// @Test
 	// public void testAddTrackWithStatusNewToOrder() {

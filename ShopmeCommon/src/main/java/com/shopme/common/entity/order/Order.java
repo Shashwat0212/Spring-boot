@@ -1,7 +1,11 @@
 package com.shopme.common.entity.order;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.shopme.common.entity.AbstractAddress;
@@ -14,8 +18,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -54,6 +60,10 @@ public class Order extends AbstractAddress {
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private Set<OrderDetail> orderDetails = new HashSet<>();
+
+	@ManyToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	@OrderBy("updatedTime ASC")
+	private List<OrderTrack> orderTracks = new ArrayList<>();
 
 	public Order() {
 	}
@@ -229,4 +239,19 @@ public class Order extends AbstractAddress {
 
 		return address;
 	}
+
+	public List<OrderTrack> getOrderTracks() {
+		return orderTracks;
+	}
+
+	public void setOrderTracks(List<OrderTrack> orderTracks) {
+		this.orderTracks = orderTracks;
+	}
+
+	@Transient
+	public String getDeliverDateOnForm() {
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		return dateFormatter.format(this.deliverDate);
+	}
+
 }
