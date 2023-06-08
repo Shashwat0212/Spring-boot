@@ -1,6 +1,7 @@
 package com.shopme.common.entity.order;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
@@ -58,10 +58,10 @@ public class Order extends AbstractAddress {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<OrderDetail> orderDetails = new HashSet<>();
 
-	@ManyToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("updatedTime ASC")
 	private List<OrderTrack> orderTracks = new ArrayList<>();
 
@@ -253,5 +253,12 @@ public class Order extends AbstractAddress {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormatter.format(this.deliverDate);
 	}
-
+	public void setDeliverDateOnForm(String dateString) {
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			this.deliverDate = dateFormatter.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 }

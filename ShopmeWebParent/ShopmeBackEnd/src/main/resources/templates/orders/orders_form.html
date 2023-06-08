@@ -78,7 +78,7 @@
 						class="tab-pane fade p-3"
 						id="track"
 						role="tabpanel">
-						<h2>Edit order tracking</h2>
+						<div th:replace="orders/orders_form_tracks :: content"></div>
 					</div>
 				</div>
 			</div>
@@ -97,6 +97,7 @@
 			</div>
 		</form>
 		<div th:replace="modal_fragments :: modal_dialog"></div>
+		<div th:replace="orders/add_product_modal :: content"></div>
 		<div th:replace="fragments :: footer">Static footer</div>
 	</div>
 	<script type="text/javascript">
@@ -114,6 +115,8 @@
 	<script th:src="@{/js/common_form.js}"></script>
 	<script th:src="@{/js/common_form_country_state.js}"></script>
 	<script th:src="@{/js/order_form_overview_products.js}"></script>
+	<script th:src="@{/js/order_form_add_product.js}"></script>
+	<script th:src="@{/js/order_form_tracks.js}"></script>
 	<script th:src="@{/js/jquery.number.min.js}"></script>
 </body>
 </html>
