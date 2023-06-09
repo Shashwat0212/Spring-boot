@@ -40,6 +40,9 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
+				.requestMatchers("/states/list_by_country/**")
+				.hasAnyAuthority("Admin", "Salesperson")
+
 				.requestMatchers("/users/**", "/settings/**", "/countries/**",
 						"/states/**")
 				.hasAuthority("Admin")
@@ -61,9 +64,16 @@ public class WebSecurityConfig {
 				.requestMatchers("/products/**")
 				.hasAnyAuthority("Admin", "Editor")
 
+				.requestMatchers("/orders", "/orders/", "/orders/page/**",
+						"/orders/detail/**")
+				.hasAnyAuthority("Admin", "Salesperson", "Shipper")
+
 				.requestMatchers("/customers/**", "/orders/**",
 						"/get_shipping_cost")
 				.hasAnyAuthority("Admin", "Salesperson")
+
+				.requestMatchers("/orders_shipper/update/**")
+				.hasAnyAuthority("Shipper")
 
 				.anyRequest().authenticated().and().formLogin()
 				.loginPage("/login").usernameParameter("email").permitAll()
