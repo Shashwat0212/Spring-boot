@@ -3,6 +3,8 @@ package com.shopme.common.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.shopme.common.Constants;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -141,7 +143,8 @@ public class Category extends IdBasedEntity {
 	public String getImagePath() {
 		if (this.id == null)
 			return "/images/image-thumbnail.png";
-		return "/category-images/" + this.id + "/" + this.image;
+		return Constants.S3_BASE_URI + "/category-images/" + this.id + "/"
+				+ this.image;
 	}
 
 	@Transient

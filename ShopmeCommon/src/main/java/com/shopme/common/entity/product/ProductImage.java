@@ -1,5 +1,6 @@
 package com.shopme.common.entity.product;
 
+import com.shopme.common.Constants;
 import com.shopme.common.entity.IdBasedEntity;
 
 import jakarta.persistence.Column;
@@ -51,6 +52,7 @@ public class ProductImage extends IdBasedEntity {
 	}
 	@Transient
 	public String imagePath() {
-		return "/product-images/" + product.getId() + "/extras/" + this.name;
+		return Constants.S3_BASE_URI + "/product-images/" + product.getId()
+				+ "/extras/" + this.name;
 	}
 }

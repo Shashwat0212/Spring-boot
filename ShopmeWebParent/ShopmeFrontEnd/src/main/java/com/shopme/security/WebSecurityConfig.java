@@ -35,7 +35,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
 				.requestMatchers("/account_details", "/update_account_details",
-						"/cart", "/address_book/**", "/checkout",
+						"/orders/**", "/cart", "/address_book/**", "/checkout",
 						"/place_order", "/process_paypal_order")
 				.authenticated().anyRequest().permitAll().and().formLogin()
 				.loginPage("/login").usernameParameter("email")
